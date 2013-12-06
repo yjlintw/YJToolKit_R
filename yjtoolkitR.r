@@ -29,3 +29,17 @@ df.diff <- function(s1, n1, s2, n2) {((s1^2/n1) + (s2^2/n2))^2/(((s1^2/n1)^2/(n1
 moe.diff <- function(alpha, se.diff.mean, df) {qt(1-alpha/2, df) * se.diff.mean}
 upper.ci.diff <- function(diff.mean, moe) {diff.mean + moe}
 lower.ci.diff <- function(diff.mean, moe) {diff.mean - moe}
+# Sample size calculations
+z.alpha.2 <- function(alpha) { qnorm(1-alpha/2)}
+ss.prop <- function(p.hat, z.alpha.2, moe) { p.hat * (1 - p.hat) * (z.alpha.2/moe)^2 }
+ss.mean <- function(z.alpha.2, sigma, moe) { (z.alpha.2 * sigma/moe)^2 }
+# Simple linear regression
+sum.squares <- function(x, xbar) { sum((x-xbar)^2)}
+se.slope <- function(s.e, sum.squares) { s.e/sqrt(sum.squares) }
+t.value <- function(b1, se.slope) { b1 / se.slope }
+point.est <- function(b0, b1, x) { b0 + b1 * x }
+t.alpha.2 <- function (alpha, n) { qt(1-alpha/2, df=n-2) }
+ci.lower <- function (point.est, t.alpha.2, s.e, x, xbar, sum.squares, n) { point.est - t.alpha.2 * (s.e * sqrt(1/n + ((x-xbar)^2 / sum.squares)))}
+ci.upper <- function (point.est, t.alpha.2, s.e, x, xbar, sum.squares, n) { point.est + t.alpha.2 * (s.e * sqrt(1/n + ((x-xbar)^2 / sum.squares)))}
+pred.lower <- function (point.est, t.alpha.2, s.e, x, xbar, sum.squares, n) { point.est - t.alpha.2 * (s.e * sqrt(1+1/n + ((x-xbar)^2 / sum.squares)))}
+pred.upper <- function (point.est, t.alpha.2, s.e, x, xbar, sum.squares, n) { point.est + t.alpha.2 * (s.e * sqrt(1+1/n + ((x-xbar)^2 / sum.squares)))}
